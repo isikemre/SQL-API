@@ -1,0 +1,5 @@
+name: SQL API
+version: 1.0
+main: de.mreturkey.sql.PluginLoader
+author: mReTurkey
+description: 'A user-friendly API for SQL. (MySQL, SQLite, MSSQL, and more...)'
