@@ -2,7 +2,8 @@ package de.mreturkey.sql.operator;
 
 public enum LogicalOperator implements Operator {
 
-	LOL("LOL");
+	AND("AND"),
+	OR("OR");
 	
 	private final String syntax;
 	
@@ -13,6 +14,11 @@ public enum LogicalOperator implements Operator {
 	@Override
 	public String getSyntax() {
 		return syntax;
+	}
+	
+	@Override
+	public String toString() {
+		return getSyntax();
 	}
 	
 }

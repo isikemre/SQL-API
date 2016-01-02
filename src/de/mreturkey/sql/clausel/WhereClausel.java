@@ -3,21 +3,32 @@ package de.mreturkey.sql.clausel;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mreturkey.sql.operator.LogicalOperator;
 import de.mreturkey.sql.util.WhereEntry;
 
 public class WhereClausel implements Clausel {
-
+	
+	/**
+	 * The first (index:0) entry in this list is the main WhereEntry.<br>
+	 * That means, that all other entries need a LogicalOperator, but the main WhereEntry not (LogicalOperator is there 'null').
+	 */
 	private final List<WhereEntry<?>> entries;
+	private String lastSQL;
+	private boolean changed = true;
 	
 	public WhereClausel(WhereEntry<?>... entries) {
 		this.entries = new ArrayList<>();
 		for(WhereEntry<?> we : entries) {
-			this.add(we);
+			switch (we.getLogicalOperator()) {
+				case AND: { this.and(we); break; }
+				case OR: { this.or(we); break; }
+				default: { throw new IllegalArgumentException("Unknown LogicalOperator"); }
+			}
 		}
 	}
 	
 	public <V> WhereClausel(String column, String operator, V value) {
-		this(new WhereEntry<V>(column, operator, value));
+		this(new WhereEntry<V>(column, operator, value, null));
 	}
 
 	public WhereClausel() {
@@ -25,24 +36,81 @@ public class WhereClausel implements Clausel {
 	}
 	
 	public <V> void add(WhereEntry<V> entry) {
-		entries.add(entry);
+		if(entries.isEmpty()) {
+			if(entry.getLogicalOperator() != null) throw new IllegalArgumentException("LogicalOperator is not NULL (#1)");
+			entries.add(entry);
+		} else {
+			if(entry.getLogicalOperator() == null) throw new NullPointerException("logicalOperator is null (Use OR or AND)");
+			entries.add(entry);
+		}
+		changed = true;
+	}
+	public <V> void add(String column, String operator, V value, LogicalOperator logicalOperator) {
+		add(new WhereEntry<V>(column, operator, value, logicalOperator));
 	}
 	
-	public <V> void add(String column, String operator, V value) {
-		entries.add(new WhereEntry<V>(column, operator, value));
+	
+	public <V> void main(WhereEntry<V> entry) {
+		if(entry.getLogicalOperator() != null) throw new IllegalArgumentException("LogicalOperator is not NULL (#2)");
+		if(entries.isEmpty()) {
+			entries.add(entry);
+		} else {
+			entries.set(0, entry);
+		}
+		changed = true;
+	}
+	public <V> void main(String column, String operator, V value) {
+		main(new WhereEntry<V>(column, operator, value, null));
+	}
+	
+	public <V> void and(WhereEntry<V> entry) {
+		checkMainEntry();
+		if(entry.getLogicalOperator() != LogicalOperator.AND) throw new IllegalArgumentException("LogicalOperator is not AND");
+		entries.add(entry);
+		changed = true;
+	}
+	public <V> void and(String column, String operator, V value) {
+		and(new WhereEntry<V>(column, operator, value, LogicalOperator.AND));
+	}
+	
+	public <V> void or(WhereEntry<V> entry) {
+		checkMainEntry();
+		if(entry.getLogicalOperator() != LogicalOperator.OR) throw new IllegalArgumentException("LogicalOperator is not OR");
+		entries.add(entry);
+		changed = true;
+	}
+	public <V> void or(String column, String operator, V value) {
+		or(new WhereEntry<V>(column, operator, value, LogicalOperator.OR));
+	}
+	
+	private void checkMainEntry() {
+		if(entries.isEmpty()) entries.add(null);
 	}
 	
 	public WhereEntry<?> get(int index) {
 		return entries.get(index);
 	}
 	
+	public boolean isChanged() {
+		return changed;
+	}
+	
 	@Override
-	public String toString() {
+	public String toSQL() {
+		if(!changed) return lastSQL;
+		if(!entries.isEmpty() && entries.get(0) == null) throw new NullPointerException("the first entry (main) is missing");
 		String res = "";
 		for(WhereEntry<?> e : entries) {
-			System.out.println(e.toSQL());
+			res += e.toSQL() + " ";
 		}
-		return res;
+		lastSQL = res.substring(0, res.length() -1);
+		changed = false;
+		return lastSQL;
+	}
+	
+	@Override
+	public String toString() {
+		return toSQL();
 	}
 	
 	/* TESTS */
