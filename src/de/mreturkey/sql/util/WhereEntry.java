@@ -31,11 +31,23 @@ public class WhereEntry<V> {
 		return value;
 	}
 	
-	public String toSQL() {
+	private Object parseBoolToInt(Object obj) {
+		if(obj instanceof Boolean) {
+			if((boolean) obj) return 1;
+			return 0;
+		}
+		return obj;
+	}
+	
+	public String toSQL(boolean ignoreLogicalOperator) {
 		final String sql;
-		if(logicalOperator == null) sql = "`"+column+"` "+operator + " '"+value+"'";
-		else sql = logicalOperator +" `"+column+"` "+operator + " '"+value+"'";
+		if(ignoreLogicalOperator || logicalOperator == null) sql = "`"+column+"` "+operator + " '"+parseBoolToInt(value)+"'";
+		else sql = logicalOperator +" `"+column+"` "+operator + " '"+parseBoolToInt(value)+"'";
 		return sql;
+	}
+	
+	public String toSQL() {
+		return toSQL(false);
 	}
 	
 	@Override

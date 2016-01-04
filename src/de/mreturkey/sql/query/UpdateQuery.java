@@ -14,11 +14,7 @@ public class UpdateQuery implements Query {
 	private String lastSQL;
 	private boolean changed = true;
 	
-	private final QueryType type;
-	
-	public UpdateQuery() {
-		this.type = QueryType.UPDATE;
-	}
+	private final QueryType type = QueryType.UPDATE;
 	
 	@Override
 	public String getTable() {
@@ -38,6 +34,7 @@ public class UpdateQuery implements Query {
 		return whereClausel;
 	}
 
+	@Override
 	public void setTable(String table) {
 		this.table = table;
 		changed = true;
@@ -45,6 +42,16 @@ public class UpdateQuery implements Query {
 
 	public void addValue(String column, Object value) {
 		this.values.put(column, value.toString());
+		changed = true;
+	}
+	
+	public void replaceValue(String column, String value) {
+		values.replace(column, value);
+		changed = true;
+	}
+	
+	public void removeValue(String column) {
+		values.remove(column);
 		changed = true;
 	}
 
@@ -65,9 +72,9 @@ public class UpdateQuery implements Query {
 		} else {
 			String tmp = "SET ";
 			for(Entry<String, String> entry : values.entrySet()) {
-				tmp += entry.getKey() + "='"+entry.getValue()+"', ";
+				tmp += entry.getKey() + "='"+entry.getValue()+"',";
 			}
-			set = tmp.substring(0, tmp.length() -2);
+			set = tmp.substring(0, tmp.length() -1);
 		}
 		
 		if(whereClausel != null) {

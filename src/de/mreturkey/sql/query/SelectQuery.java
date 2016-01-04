@@ -10,20 +10,14 @@ public class SelectQuery implements Query {
 	private String table;
 	private ArrayList<String> columns;
 	private WhereClausel whereClausel;
-	private int offset, limit;
+	private int offset = -1, limit = -1;
 	private OrderByEntry orderBy;
 	
-	private final QueryType type;
+	private final QueryType type = QueryType.SELECT;
 	
 	private String lastSQL;
 	private boolean changed = true;
 	
-	public SelectQuery() {
-		this.type = QueryType.SELECT;
-		this.offset = -1;
-		this.limit = -1;
-	}
-
 	@Override
 	public String getTable() {
 		return table;
@@ -58,6 +52,7 @@ public class SelectQuery implements Query {
 		return changed;
 	}
 	
+	@Override
 	public void setTable(String table) {
 		this.table = table;
 		changed = true;
@@ -97,7 +92,7 @@ public class SelectQuery implements Query {
 	@Override
 	public String toSQL() {
 		if(table == null) throw new NullPointerException("table is null");
-		if(!changed && !whereClausel.isChanged()) return lastSQL; //Cache
+		if(!changed && whereClausel != null && !whereClausel.isChanged()) return lastSQL; //Cache
 		
 		String col;
 		
@@ -109,25 +104,26 @@ public class SelectQuery implements Query {
 			col = "*";
 		} else {
 			col = "";
-			for(String column : columns) col += "`" + column + "`, ";
-			col = col.substring(0, col.length() -2);
+			for(String column : columns) col += "`" + column + "`,";
+			col = col.substring(0, col.length() -1);
 		}
 		
 		select = "SELECT " + col + " FROM `" + table + "`";
 		
 		if(whereClausel != null) {
-			where = "WHERE "+whereClausel.toSQL();
+			where = " WHERE "+whereClausel.toSQL();
 		} else where = "";
 		
 		if(limit != -1) {
-			extras += "LIMIT " +limit+ " ";
+			extras += " LIMIT " +limit;
 		}
 		
 		if(offset != -1) {
-			extras += "OFFSET " +offset + " ";
+			extras += " OFFSET " +offset;
 		}
 		
-		final String sql = select + " " + where + (extras.length() != 0 ? " " : "") + extras;
+		final String sql = select + where + extras;
+		
 		this.lastSQL = sql;
 		this.changed = false;
 		

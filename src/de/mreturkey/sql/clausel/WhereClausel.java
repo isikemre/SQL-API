@@ -18,13 +18,7 @@ public class WhereClausel implements Clausel {
 	
 	public WhereClausel(WhereEntry<?>... entries) {
 		this.entries = new ArrayList<>();
-		for(WhereEntry<?> we : entries) {
-			switch (we.getLogicalOperator()) {
-				case AND: { this.and(we); break; }
-				case OR: { this.or(we); break; }
-				default: { throw new IllegalArgumentException("Unknown LogicalOperator"); }
-			}
-		}
+		for(WhereEntry<?> we : entries) this.add(we);
 	}
 	
 	public <V> WhereClausel(String column, String operator, V value) {
@@ -37,7 +31,6 @@ public class WhereClausel implements Clausel {
 	
 	public <V> void add(WhereEntry<V> entry) {
 		if(entries.isEmpty()) {
-			if(entry.getLogicalOperator() != null) throw new IllegalArgumentException("LogicalOperator is not NULL (#1)");
 			entries.add(entry);
 		} else {
 			if(entry.getLogicalOperator() == null) throw new NullPointerException("logicalOperator is null (Use OR or AND)");
@@ -51,7 +44,6 @@ public class WhereClausel implements Clausel {
 	
 	
 	public <V> void main(WhereEntry<V> entry) {
-		if(entry.getLogicalOperator() != null) throw new IllegalArgumentException("LogicalOperator is not NULL (#2)");
 		if(entries.isEmpty()) {
 			entries.add(entry);
 		} else {
@@ -100,8 +92,10 @@ public class WhereClausel implements Clausel {
 		if(!changed) return lastSQL;
 		if(!entries.isEmpty() && entries.get(0) == null) throw new NullPointerException("the first entry (main) is missing");
 		String res = "";
+		int i = 0;
 		for(WhereEntry<?> e : entries) {
-			res += e.toSQL() + " ";
+			res += e.toSQL(i == 0 ? true : false) + " ";
+			i++;
 		}
 		lastSQL = res.substring(0, res.length() -1);
 		changed = false;

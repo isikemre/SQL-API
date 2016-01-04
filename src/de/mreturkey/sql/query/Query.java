@@ -8,6 +8,8 @@ public interface Query {
 	 */
 	String getTable();
 	
+	void setTable(String table);
+	
 	/**
 	 * Returns the type of the query
 	 * @return the type of the query
