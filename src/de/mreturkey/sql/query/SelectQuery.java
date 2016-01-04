@@ -122,6 +122,10 @@ public class SelectQuery implements Query {
 			extras += " OFFSET " +offset;
 		}
 		
+		if(orderBy != null) {
+			extras += " ORDER BY `"+orderBy.getColumn()+"` "+orderBy.getOrderBy().toSQL();
+		}
+		
 		final String sql = select + where + extras;
 		
 		this.lastSQL = sql;

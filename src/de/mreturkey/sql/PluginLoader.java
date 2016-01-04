@@ -2,6 +2,7 @@ package de.mreturkey.sql;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import de.mreturkey.sql.clausel.OrderBy;
 import de.mreturkey.sql.query.builder.Builder;
 import de.mreturkey.sql.query.builder.SelectBuilder;
 
@@ -34,6 +35,8 @@ public class PluginLoader extends JavaPlugin {
 		String lol = select
 				.from("session")
 				.where("uuid", "=", "adjabdjasbd-adasjdasda-adasdnasjdna-adasdad")
+				.limit(5)
+				.orderBy("id", OrderBy.DESC)
 				.test();
 		System.out.println(lol);
 	}

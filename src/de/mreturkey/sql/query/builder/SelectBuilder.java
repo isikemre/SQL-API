@@ -79,7 +79,7 @@ public class SelectBuilder {
 		return this;
 	}
 	
-	public Result exe(Provider provider) throws SQLTimeoutException, SQLException {
+	public Result execute(Provider provider) throws SQLTimeoutException, SQLException {
 		SelectQuery sq = new SelectQuery();
 		
 		sq.setTable(table);
