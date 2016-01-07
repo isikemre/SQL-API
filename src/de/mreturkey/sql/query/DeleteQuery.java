@@ -41,7 +41,7 @@ public class DeleteQuery implements Query {
 		
 		final String where, sql;
 		
-		if(whereClausel != null) {
+		if(whereClausel != null && !whereClausel.isEmpty()) {
 			where = " WHERE "+whereClausel.toSQL();
 		} else where = "";
 		
@@ -51,7 +51,6 @@ public class DeleteQuery implements Query {
 		changed = false;
 		
 		return sql;
-//		DELETE FROM session WHERE id = 1
 	}
 
 }

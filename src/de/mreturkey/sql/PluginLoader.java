@@ -2,9 +2,9 @@ package de.mreturkey.sql;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.mreturkey.sql.clausel.OrderBy;
+import de.mreturkey.sql.operator.LogicalOperator;
 import de.mreturkey.sql.query.builder.Builder;
-import de.mreturkey.sql.query.builder.SelectBuilder;
+import de.mreturkey.sql.query.builder.DeleteBuilder;
 
 public class PluginLoader extends JavaPlugin {
 
@@ -30,14 +30,13 @@ public class PluginLoader extends JavaPlugin {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		SelectBuilder select = Builder.buildSelect();
+		DeleteBuilder delete = Builder.buildDelete();
 		
-		String lol = select
-				.from("session")
-				.where("uuid", "=", "adjabdjasbd-adasjdasda-adasdnasjdna-adasdad")
-				.limit(5)
-				.orderBy("id", OrderBy.DESC)
+		String lol = delete.from("jaja")
+				.where("uuid", "=", true)
+				.where("name", "=", "mReTurkey", LogicalOperator.AND)
 				.test();
+		
 		System.out.println(lol);
 	}
 }

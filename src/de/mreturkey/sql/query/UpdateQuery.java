@@ -8,13 +8,22 @@ import de.mreturkey.sql.clausel.WhereClausel;
 public class UpdateQuery implements Query {
 
 	private String table;
-	private final HashMap<String, String> values = new HashMap<>();
+	private final HashMap<String, String> values;
 	private WhereClausel whereClausel;
 	
 	private String lastSQL;
 	private boolean changed = true;
 	
 	private final QueryType type = QueryType.UPDATE;
+	
+	public UpdateQuery() {
+		this.values = new HashMap<>();
+	}
+	
+	public UpdateQuery(HashMap<String, String> values) {
+		if(values == null) values = new HashMap<>();
+		this.values = values;
+	}
 	
 	@Override
 	public String getTable() {
@@ -41,12 +50,14 @@ public class UpdateQuery implements Query {
 	}
 
 	public void addValue(String column, Object value) {
-		this.values.put(column, value.toString());
+		if(value instanceof Boolean && value != null) value = (boolean) value == true ? 1 : 0;
+		values.put(column, value == null ? null : value.toString());
 		changed = true;
 	}
-	
-	public void replaceValue(String column, String value) {
-		values.replace(column, value);
+
+	public void replaceValue(String column, Object value) {
+		if(value instanceof Boolean && value != null) value = (boolean) value == true ? 1 : 0;
+		values.replace(column, value == null ? null : value.toString());
 		changed = true;
 	}
 	
@@ -77,7 +88,7 @@ public class UpdateQuery implements Query {
 			set = tmp.substring(0, tmp.length() -1);
 		}
 		
-		if(whereClausel != null) {
+		if(whereClausel != null && !whereClausel.isEmpty()) {
 			where = "WHERE "+whereClausel.toSQL();
 		} else where = "";
 		

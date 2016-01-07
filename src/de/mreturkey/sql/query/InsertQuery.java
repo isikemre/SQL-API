@@ -6,11 +6,20 @@ import java.util.Map.Entry;
 public class InsertQuery implements Query {
 
 	private String table;
-	private final HashMap<String, String> values = new HashMap<>();
+	private final HashMap<String, String> values;
 	private final QueryType type = QueryType.INSERT;
 	
 	private boolean changed = true;
 	private String lastSQL;
+	
+	public InsertQuery() {
+		this.values = new HashMap<>();
+	}
+	
+	public InsertQuery(HashMap<String, String> values) {
+		if(values == null) values = new HashMap<>();
+		this.values = values;
+	}
 	
 	@Override
 	public String getTable() {
@@ -27,11 +36,13 @@ public class InsertQuery implements Query {
 	}
 	
 	public void addValue(String column, Object value) {
+		if(value instanceof Boolean && value != null) value = (boolean) value == true ? 1 : 0;
 		values.put(column, value == null ? null : value.toString());
 		changed = true;
 	}
 
 	public void replaceValue(String column, Object value) {
+		if(value instanceof Boolean && value != null) value = (boolean) value == true ? 1 : 0;
 		values.replace(column, value == null ? null : value.toString());
 		changed = true;
 	}
@@ -68,7 +79,7 @@ public class InsertQuery implements Query {
 			vals = tmpVals.substring(0, tmpVals.length() -1) + ")";
 		}
 		
-		sql = "INSERT INTO " + table + " " + cols + " VALUES " + vals;
+		sql = "INSERT INTO `" + table + "` " + cols + " VALUES " + vals;
 		
 		lastSQL = sql;
 		changed = false;

@@ -52,6 +52,12 @@ public class SelectBuilder {
 		return this;
 	}
 	
+	public SelectBuilder columns(String... columns) {
+		if(this.columns == null) this.columns = new ArrayList<>();
+		for(String c : columns) this.columns.add(c);
+		return this;
+	}
+	
 	public <V> SelectBuilder where(String column, String operator, V value) {
 		if(whereClausel == null) whereClausel = new WhereClausel();
 		whereClausel.add(column, operator, value, null);
@@ -80,7 +86,7 @@ public class SelectBuilder {
 	}
 	
 	public Result execute(Provider provider) throws SQLTimeoutException, SQLException {
-		SelectQuery sq = new SelectQuery();
+		final SelectQuery sq = new SelectQuery();
 		
 		sq.setTable(table);
 		sq.setColumns(columns);
@@ -93,7 +99,7 @@ public class SelectBuilder {
 	}
 	
 	public String test() {
-		SelectQuery sq = new SelectQuery();
+		final SelectQuery sq = new SelectQuery();
 		sq.setTable(table);
 		sq.setColumns(columns);
 		sq.setLimit(limit);

@@ -6,4 +6,16 @@ public interface Builder {
 		return new SelectBuilder();
 	}
 	
+	public static InsertBuilder buildInsert() {
+		return new InsertBuilder();
+	}
+	
+	public static UpdateBuilder buildUpdate() {
+		return new UpdateBuilder();
+	}
+	
+	public static DeleteBuilder buildDelete() {
+		return new DeleteBuilder();
+	}
+	
 }

@@ -110,8 +110,8 @@ public class SelectQuery implements Query {
 		
 		select = "SELECT " + col + " FROM `" + table + "`";
 		
-		if(whereClausel != null) {
-			where = " WHERE "+whereClausel.toSQL();
+		if(whereClausel != null && !whereClausel.isEmpty()) {
+			where = "WHERE "+whereClausel.toSQL();
 		} else where = "";
 		
 		if(limit != -1) {

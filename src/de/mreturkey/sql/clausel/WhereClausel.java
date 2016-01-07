@@ -87,8 +87,13 @@ public class WhereClausel implements Clausel {
 		return changed;
 	}
 	
+	public boolean isEmpty() {
+		return entries.isEmpty();
+	}
+	
 	@Override
 	public String toSQL() {
+		if(entries == null || entries.isEmpty()) return "";
 		if(!changed) return lastSQL;
 		if(!entries.isEmpty() && entries.get(0) == null) throw new NullPointerException("the first entry (main) is missing");
 		String res = "";
@@ -97,7 +102,7 @@ public class WhereClausel implements Clausel {
 			res += e.toSQL(i == 0 ? true : false) + " ";
 			i++;
 		}
-		lastSQL = res.substring(0, res.length() -1);
+		lastSQL = res == "" ? "" : res.substring(0, res.length() -1);
 		changed = false;
 		return lastSQL;
 	}
