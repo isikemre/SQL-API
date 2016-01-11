@@ -2,9 +2,11 @@ package de.mreturkey.sql.api;
 
 import de.mreturkey.sql.provider.Provider;
 
-public interface API {
+public final class API {
 
-	static Provider getProvider(String name) {
+	private API() {}
+	
+	public static Provider getProvider(String name) {
 		return null;
 	}
 	

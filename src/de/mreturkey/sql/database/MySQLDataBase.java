@@ -1,14 +1,14 @@
-package de.mreturkey.sql.util;
+package de.mreturkey.sql.database;
 
-public class Database {
+import de.mreturkey.sql.provider.MySQL;
+import de.mreturkey.sql.provider.Provider;
 
-	private final String host;
+public class MySQLDataBase extends MySQL implements DataBase {
+
+	private final String host, database, user, password;
 	private final int port;
-	private final String database;
-	private final String user;
-	private final String password;
 	
-	public Database(String host, int port, String database, String user, String password) {
+	public MySQLDataBase(String host, int port, String database, String user, String password) {
 		this.host = host;
 		this.port = port;
 		this.database = database;
@@ -35,8 +35,11 @@ public class Database {
 	public String getPassword() {
 		return password;
 	}
-	
-	
+
+	@Override
+	public DataBaseType getType() {
+		return DataBaseType.MYSQL;
+	}
 	
 	//Coming soon:
 	/**

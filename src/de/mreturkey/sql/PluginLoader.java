@@ -2,14 +2,12 @@ package de.mreturkey.sql;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.mreturkey.sql.operator.LogicalOperator;
-import de.mreturkey.sql.query.builder.Builder;
-import de.mreturkey.sql.query.builder.DeleteBuilder;
+import de.mreturkey.sql.provider.MySQL;
 
 public class PluginLoader extends JavaPlugin {
 
 	private static PluginLoader instance = null;
-	
+	private static final MySQL
 	@Override
 	public void onLoad() {
 		instance = this;
@@ -30,13 +28,6 @@ public class PluginLoader extends JavaPlugin {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		DeleteBuilder delete = Builder.buildDelete();
 		
-		String lol = delete.from("jaja")
-				.where("uuid", "=", true)
-				.where("name", "=", "mReTurkey", LogicalOperator.AND)
-				.test();
-		
-		System.out.println(lol);
 	}
 }

@@ -9,12 +9,12 @@ import javax.sql.DataSource;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import de.mreturkey.sql.clausel.WhereClausel;
+import de.mreturkey.sql.database.MySQLDataBase;
 import de.mreturkey.sql.query.DeleteQuery;
 import de.mreturkey.sql.query.InsertQuery;
 import de.mreturkey.sql.query.SelectQuery;
 import de.mreturkey.sql.query.UpdateQuery;
 import de.mreturkey.sql.result.Result;
-import de.mreturkey.sql.util.Database;
 
 public class MySQL implements Provider {
 
@@ -25,7 +25,11 @@ public class MySQL implements Provider {
 		
 	}
 	
-	public Connection openConnection(Database database) throws SQLException {
+	public MySQL(MySQLDataBase database) {
+		//TODO --
+	}
+	
+	public Connection openConnection(MySQLDataBase database) throws SQLException {
 		if(database == null) throw new NullPointerException("database cannot be null");
 		
 		final MysqlDataSource mysql = new MysqlDataSource();
