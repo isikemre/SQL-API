@@ -1,18 +1,12 @@
 package de.mreturkey.sql.database;
 
-import java.sql.Connection;
+import de.mreturkey.sql.provider.Provider;
+import de.mreturkey.sql.provider.ProviderType;
 
 public interface DataBase {
 
-	/**
-	 * Returns the type of this database
-	 * @return the type of this database
-	 */
-	DataBaseType getType();
+	Provider openConnection();
 	
-	/**
-	 * Opens a connection with the config, which was set before this method invoked.
-	 * @return {@link Connection} - via provider
-	 */
-	Connection openConnection();
+	ProviderType getType();
+	
 }

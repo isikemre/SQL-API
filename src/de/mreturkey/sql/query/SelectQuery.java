@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import de.mreturkey.sql.clausel.WhereClausel;
 import de.mreturkey.sql.util.OrderByEntry;
+import de.mreturkey.sql.util.PrepareEntry;
 
 public class SelectQuery implements Query {
 
@@ -16,7 +17,8 @@ public class SelectQuery implements Query {
 	private final QueryType type = QueryType.SELECT;
 	
 	private String lastSQL;
-	private boolean changed = true;
+	private PrepareEntry lastPreparedSQL;
+	private boolean changed = true, changedPrepared = true;
 	
 	@Override
 	public String getTable() {
@@ -132,5 +134,49 @@ public class SelectQuery implements Query {
 		this.changed = false;
 		
 		return sql;
+	}
+	
+	public PrepareEntry toPreparedSQL() {
+		if(table == null) throw new NullPointerException("table is null");
+		if(!changedPrepared && whereClausel != null && !whereClausel.isChanged()) return lastPreparedSQL; //Cache
+		
+		String col;
+		
+		final String select;
+		final String where;
+		String extras = "";
+		
+		if(columns == null || columns.isEmpty()) {
+			col = "*";
+		} else {
+			col = "";
+			for(String column : columns) col += "`" + column + "`,";
+			col = col.substring(0, col.length() -1);
+		}
+		
+		select = "SELECT " + col + " FROM `" + table + "`";
+		
+		if(whereClausel != null && !whereClausel.isEmpty()) {
+			where = "WHERE "+whereClausel.toPreparedSQL();
+		} else where = "";
+		
+		if(limit != -1) {
+			extras += " LIMIT " +limit;
+		}
+		
+		if(offset != -1) {
+			extras += " OFFSET " +offset;
+		}
+		
+		if(orderBy != null) {
+			extras += " ORDER BY `"+orderBy.getColumn()+"` "+orderBy.getOrderBy().toSQL();
+		}
+		
+		final String sql = select + where + extras;
+		
+		this.lastPreparedSQL = new PrepareEntry(sql, whereClausel.getEntries().toArray());
+		this.changedPrepared = false;
+		
+		return this.lastPreparedSQL;
 	}
 }

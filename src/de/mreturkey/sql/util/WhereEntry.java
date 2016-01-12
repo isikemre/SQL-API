@@ -31,6 +31,14 @@ public class WhereEntry<V> {
 		return value;
 	}
 	
+	/**
+	 * Returns the parsed value (from boolean to integer - if value is boolean)
+	 * @return
+	 */
+	public Object getParsedValue() {
+		return parseBoolToInt(value);
+	}
+	
 	private Object parseBoolToInt(Object obj) {
 		if(obj instanceof Boolean) {
 			if((boolean) obj) return 1;
@@ -48,6 +56,17 @@ public class WhereEntry<V> {
 	
 	public String toSQL() {
 		return toSQL(false);
+	}
+	
+	public String toPreparedSQL(boolean ignoreLogicalOperator) {
+		final String sql;
+		if(ignoreLogicalOperator || logicalOperator == null) sql = "`"+column+"` "+operator + " ?";
+		else sql = logicalOperator +" `"+column+"` "+operator + " ?";
+		return sql;
+	}
+	
+	public String toPreparedSQL() {
+		return toPreparedSQL(false);
 	}
 	
 	@Override

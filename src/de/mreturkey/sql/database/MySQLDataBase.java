@@ -2,8 +2,9 @@ package de.mreturkey.sql.database;
 
 import de.mreturkey.sql.provider.MySQL;
 import de.mreturkey.sql.provider.Provider;
+import de.mreturkey.sql.provider.ProviderType;
 
-public class MySQLDataBase extends MySQL implements DataBase {
+public class MySQLDataBase implements DataBase {
 
 	private final String host, database, user, password;
 	private final int port;
@@ -35,18 +36,15 @@ public class MySQLDataBase extends MySQL implements DataBase {
 	public String getPassword() {
 		return password;
 	}
+	
+	@Override
+	public Provider openConnection() {
+		return new MySQL(this);
+	}
 
 	@Override
-	public DataBaseType getType() {
-		return DataBaseType.MYSQL;
+	public ProviderType getType() {
+		return ProviderType.MYSQL;
 	}
-	
-	//Coming soon:
-	/**
-	 * fromYAML() - Method to get database inforamtions from yaml-file
-	 * fromYamlConfiguration() - Method to get database inforamtions from Bukkit's YamlConfiguration
-	 * fromXML() - Method to get database inforamtions from XML-File
-	 * fromJSON() - Method to get database inforamtions from JSON-File
-	 */
-	
+
 }

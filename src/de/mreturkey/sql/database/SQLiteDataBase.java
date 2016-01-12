@@ -1,13 +1,14 @@
 package de.mreturkey.sql.database;
 
 import java.io.File;
-import java.sql.Connection;
 
 import org.sqlite.SQLiteConfig;
 
+import de.mreturkey.sql.provider.Provider;
+import de.mreturkey.sql.provider.ProviderType;
 import de.mreturkey.sql.provider.SQLite;
 
-public class SQLiteDataBase extends SQLite implements DataBase {
+public class SQLiteDataBase implements DataBase {
 
 	private final File databaseFile;
 	private final SQLiteConfig config;
@@ -25,11 +26,6 @@ public class SQLiteDataBase extends SQLite implements DataBase {
 		this.config = config;
 	}
 	
-	@Override
-	public final DataBaseType getType() {
-		return DataBaseType.SQLITE;
-	}
-	
 	public File getDatabaseFile() {
 		return databaseFile;
 	}
@@ -37,10 +33,15 @@ public class SQLiteDataBase extends SQLite implements DataBase {
 	public SQLiteConfig getConfig() {
 		return config;
 	}
+	
+	@Override
+	public Provider openConnection() {
+		return new SQLite(this);
+	}
 
 	@Override
-	public Connection openConnection() {
-		super.openConnection(database)
+	public ProviderType getType() {
+		return ProviderType.SQLITE;
 	}
 
 }

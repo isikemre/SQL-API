@@ -13,8 +13,8 @@ public class WhereClausel implements Clausel {
 	 * That means, that all other entries need a LogicalOperator, but the main WhereEntry not (LogicalOperator is there 'null').
 	 */
 	private final List<WhereEntry<?>> entries;
-	private String lastSQL;
-	private boolean changed = true;
+	private String lastSQL, lastPreparedSQL;
+	private boolean changed = true, changedPrepared = true;
 	
 	public WhereClausel(WhereEntry<?>... entries) {
 		this.entries = new ArrayList<>();
@@ -83,6 +83,10 @@ public class WhereClausel implements Clausel {
 		return entries.get(index);
 	}
 	
+	public List<WhereEntry<?>> getEntries() {
+		return entries;
+	}
+	
 	public boolean isChanged() {
 		return changed;
 	}
@@ -105,6 +109,21 @@ public class WhereClausel implements Clausel {
 		lastSQL = res == "" ? "" : res.substring(0, res.length() -1);
 		changed = false;
 		return lastSQL;
+	}
+	
+	public String toPreparedSQL() {
+		if(entries == null || entries.isEmpty()) return "";
+		if(!changedPrepared) return lastPreparedSQL;
+		if(!entries.isEmpty() && entries.get(0) == null) throw new NullPointerException("the first entry (main) is missing");
+		String res = "";
+		int i = 0;
+		for(WhereEntry<?> e : entries) {
+			res += e.toPreparedSQL(i == 0 ? true : false) + " ";
+			i++;
+		}
+		lastPreparedSQL = res == "" ? "" : res.substring(0, res.length() -1);
+		changedPrepared = false;
+		return lastPreparedSQL;
 	}
 	
 	@Override

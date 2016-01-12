@@ -9,6 +9,7 @@ import javax.sql.DataSource;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 
 import de.mreturkey.sql.clausel.WhereClausel;
+import de.mreturkey.sql.database.DataBase;
 import de.mreturkey.sql.database.MySQLDataBase;
 import de.mreturkey.sql.query.DeleteQuery;
 import de.mreturkey.sql.query.InsertQuery;
@@ -29,6 +30,12 @@ public class MySQL implements Provider {
 		//TODO --
 	}
 	
+	@Override
+	public Connection openConnection(DataBase database) throws SQLException {
+		if(!(database instanceof MySQLDataBase)) throw new IllegalArgumentException("database argument is not a type of MySQLDataBase");
+		return this.openConnection((MySQLDataBase) database);
+	}
+	
 	public Connection openConnection(MySQLDataBase database) throws SQLException {
 		if(database == null) throw new NullPointerException("database cannot be null");
 		
@@ -37,8 +44,8 @@ public class MySQL implements Provider {
 		mysql.setUser(database.getUser());
 		mysql.setPassword(database.getPassword());
 		
-		dataSource = mysql;
-		connection = dataSource.getConnection();
+		this.dataSource = mysql;
+		this.connection = dataSource.getConnection();
 		
 		return connection;
 	}
@@ -62,107 +69,4 @@ public class MySQL implements Provider {
 	public String getProviderName() {
 		return "mysql";
 	}
-
-	@Override
-	public Result query(String query, boolean prepared) throws SQLException, SQLTimeoutException {
-		
-	}
-
-	@Override
-	public Result query(String query) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result select(SelectQuery selectQuery) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result select(String table) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result select(String table, String column) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result select(String table, String... columns) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result select(String table, WhereClausel where) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result select(String table, String column, WhereClausel where) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result select(String table, WhereClausel where, String... columns) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result insert(InsertQuery insertQuery) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result insert(String table, String[] columns, Object[] values) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result update(UpdateQuery updateQuery) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result update(String table, String[] columns, Object[] values) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result update(String table, String[] columns, Object[] values, WhereClausel where)
-			throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result delete(DeleteQuery deleteQuery) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result delete(String table) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Result delete(String table, WhereClausel where) throws SQLException, SQLTimeoutException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 }

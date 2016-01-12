@@ -16,29 +16,40 @@ import de.mreturkey.sql.result.Result;
  * @see Provider
  *
  */
-public interface QueryProvider {
+public interface Connection {
 
 	/**
-	 * Returns the {@link Result} of the given query.<br>
-	 * If <code>prepared</code> is false, the query will not executed as PreparedStatment.<br>
-	 * As default it will use prepared statements.
-	 * @param query - SQL Query as {@link String}
-	 * @param prepared - false if you don't want to execute this query as prepared.
+	 * Returns the {@link Result} of the given query.
+	 * @param sql
+	 * @param args
 	 * @return the {@link Result} of the given query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
 	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result query(String query, boolean prepared) throws SQLException, SQLTimeoutException;
+	Result prepareQuery(String query, Object... args) throws SQLException;
 	
 	/**
-	 * Returns the {@link Result} of the given query.<br>
-	 * This method will execute the given query as PreparedStatment.
+	 * Prepares and executes the given query.
+	 * @param sql
+	 * @param args
+	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
+	 */
+	void prepareUpdateQuery(String query, Object... args) throws SQLException;
+	
+	/**
+	 * Returns the {@link Result} of the given query.
 	 * @param query - SQL Query as {@link String}
 	 * @return the {@link Result} of the given query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result query(String query) throws SQLException, SQLTimeoutException;
+	Result executeQuery(String query) throws SQLException;
+	
+	/**
+	 * Only executes the given query, without a {@link Result}.
+	 * @param query
+	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
+	 */
+	void updateQuery(String query) throws SQLException;
 	
 	/**
 	 * Executes a <code>SELECT</code> Statement with the given {@link SelectQuery}<br>
@@ -46,9 +57,8 @@ public interface QueryProvider {
 	 * @param selectQuery - 
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result select(SelectQuery selectQuery) throws SQLException, SQLTimeoutException;
+	Result select(SelectQuery selectQuery) throws SQLException;
 	
 	/**
 	 * Executes a <code>SELECT</code> Statement in all columns from and given table<br>
@@ -59,9 +69,8 @@ public interface QueryProvider {
 	 * @param table
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException
-	 * @throws SQLTimeoutException
 	 */
-	Result select(String table) throws SQLException, SQLTimeoutException;
+	Result select(String table) throws SQLException;
 	
 	/**
 	 * Executes a <code>SELECT</code> Statement in the given column and the given table<br>
@@ -72,9 +81,8 @@ public interface QueryProvider {
 	 * @param column
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result select(String table, String column) throws SQLException, SQLTimeoutException;
+	Result select(String table, String column) throws SQLException;
 	
 	/**
 	 * Executes a <code>SELECT</code> Statement in the given columns and the given table<br>
@@ -85,9 +93,8 @@ public interface QueryProvider {
 	 * @param columns
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result select(String table, String... columns) throws SQLException, SQLTimeoutException;
+	Result select(String table, String... columns) throws SQLException;
 	
 	/**
 	 * Executes a <code>SELECT</code> Statement in all columns, the given table and the given {@link WhereClausel}<br>
@@ -98,9 +105,8 @@ public interface QueryProvider {
 	 * @param where
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result select(String table, WhereClausel where) throws SQLException, SQLTimeoutException;
+	Result select(String table, WhereClausel where) throws SQLException;
 	
 	/**
 	 * Executes a <code>SELECT</code> Statement in the given column, the given table and the given {@link WhereClausel}<br>
@@ -110,9 +116,8 @@ public interface QueryProvider {
 	 * @param table
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result select(String table, String column, WhereClausel where) throws SQLException, SQLTimeoutException;
+	Result select(String table, String column, WhereClausel where) throws SQLException;
 	
 	/**
 	 * Executes a <code>SELECT</code> Statement in the given columns, the given table and the given {@link WhereClausel}<br>
@@ -124,9 +129,8 @@ public interface QueryProvider {
 	 * @param columns
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result select(String table, WhereClausel where, String... columns) throws SQLException, SQLTimeoutException;
+	Result select(String table, WhereClausel where, String... columns) throws SQLException;
 	
 	/**
 	 * Executes a <code>INSERT</code> Statement with the given {@link InsertQuery}<br>
@@ -134,9 +138,8 @@ public interface QueryProvider {
 	 * @param insertQuery
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result insert(InsertQuery insertQuery) throws SQLException, SQLTimeoutException;
+	Result insert(InsertQuery insertQuery) throws SQLException;
 	
 	/**
 	 * Executes a <code>INSERT</code> Statement with the given columns, values and table.<br>
@@ -146,9 +149,8 @@ public interface QueryProvider {
 	 * @param values
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result insert(String table, String[] columns, Object[] values) throws SQLException, SQLTimeoutException;
+	Result insert(String table, String[] columns, Object[] values) throws SQLException;
 	
 	/**
 	 * Executes a <code>UPDATE</code> Statement with the given {@link UpdateQuery}<br>
@@ -156,9 +158,8 @@ public interface QueryProvider {
 	 * @param updateQuery
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result update(UpdateQuery updateQuery) throws SQLException, SQLTimeoutException;
+	Result update(UpdateQuery updateQuery) throws SQLException;
 	
 	/**
 	 * Executes a <code>UPDATE</code> Statement with the given columns, values and table<br>
@@ -168,9 +169,8 @@ public interface QueryProvider {
 	 * @param values
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result update(String table, String[] columns, Object[] values) throws SQLException, SQLTimeoutException;
+	Result update(String table, String[] columns, Object[] values) throws SQLException;
 	
 	/**
 	 * Executes a <code>UPDATE</code> Statement with the given columns, values, table and {@link WhereClausel}<br>
@@ -181,9 +181,8 @@ public interface QueryProvider {
 	 * @param where
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result update(String table, String[] columns, Object[] values, WhereClausel where) throws SQLException, SQLTimeoutException;
+	Result update(String table, String[] columns, Object[] values, WhereClausel where) throws SQLException;
 	
 	/**
 	 * Executes a <code>DELETE</code> Statement with the given {@link DeleteQuery}<br>
@@ -191,9 +190,8 @@ public interface QueryProvider {
 	 * @param deleteQuery
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result delete(DeleteQuery deleteQuery) throws SQLException, SQLTimeoutException;
+	Result delete(DeleteQuery deleteQuery) throws SQLException;
 	
 	/**
 	 * Executes a <code>DELETE</code> Statement with the given table<br>
@@ -203,9 +201,8 @@ public interface QueryProvider {
 	 * @param table
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result delete(String table) throws SQLException, SQLTimeoutException;
+	Result delete(String table) throws SQLException;
 	
 	/**
 	 * Executes a <code>DELETE</code> Statement with the given table and {@link WhereClausel}<br>
@@ -213,8 +210,13 @@ public interface QueryProvider {
 	 * @param where
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
-	 * @throws SQLTimeoutException when the driver has determined that the timeout value that was specified by the <code>setQueryTimeout</code> method has been exceeded and has at least attempted to cancel the currently running <code>Statement</code>
 	 */
-	Result delete(String table, WhereClausel where) throws SQLException, SQLTimeoutException;
+	Result delete(String table, WhereClausel where) throws SQLException;
+	
+	/**
+	 * Returns the {@link java.sql.Connection} of this Connection
+	 * @return the {@link java.sql.Connection} of this Connection
+	 */
+	java.sql.Connection getSQLConnection();
 	
 }

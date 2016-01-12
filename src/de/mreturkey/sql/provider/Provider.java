@@ -1,5 +1,9 @@
 package de.mreturkey.sql.provider;
 
+import java.sql.SQLException;
+
+import de.mreturkey.sql.database.DataBase;
+
 /**
  * Represents a SQL-Provider
  * 
@@ -9,7 +13,7 @@ package de.mreturkey.sql.provider;
  * @see SQLite
  *
  */
-public interface Provider extends QueryProvider {
+public interface Provider {
 
 	/**
 	 * Returns the name of this provider.
@@ -17,4 +21,9 @@ public interface Provider extends QueryProvider {
 	 */
 	String getProviderName();
 	
+	/**
+	 * Opens a connection to the sql database
+	 */
+	Connection openConnection(DataBase database) throws SQLException;
+
 }
