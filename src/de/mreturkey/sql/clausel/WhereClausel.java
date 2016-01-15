@@ -83,8 +83,12 @@ public class WhereClausel implements Clausel {
 		return entries.get(index);
 	}
 	
-	public List<WhereEntry<?>> getEntries() {
-		return entries;
+	public List<Object> getAllValues() {
+		final List<Object> tmp = new ArrayList<>();
+		for(WhereEntry<?> we : entries) {
+			tmp.add(we.getParsedValue());
+		}
+		return tmp;
 	}
 	
 	public boolean isChanged() {

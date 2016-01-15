@@ -1,6 +1,7 @@
 package de.mreturkey.sql.query;
 
 import de.mreturkey.sql.clausel.WhereClausel;
+import de.mreturkey.sql.util.PrepareEntry;
 
 public class DeleteQuery implements Query {
 
@@ -8,8 +9,24 @@ public class DeleteQuery implements Query {
 	private final QueryType type = QueryType.DELETE;
 	private WhereClausel whereClausel;
 	
-	private boolean changed;
 	private String lastSQL;
+	private PrepareEntry lastPreparedSQL;
+	private boolean changed = true, changedPrepared = true;
+	
+	public DeleteQuery() {}
+	
+	public DeleteQuery(String table) {
+		this.table = table;
+	}
+	
+	public DeleteQuery(WhereClausel whereClausel) {
+		this.whereClausel = whereClausel;
+	}
+	
+	public DeleteQuery(String table, WhereClausel whereClausel) {
+		this.table = table;
+		this.whereClausel = whereClausel;
+	}
 	
 	@Override
 	public String getTable() {
@@ -51,6 +68,24 @@ public class DeleteQuery implements Query {
 		changed = false;
 		
 		return sql;
+	}
+	
+	public PrepareEntry toPreparedSQL() {
+		if(table == null) throw new NullPointerException("table is null");
+		if(!changedPrepared && whereClausel != null && !whereClausel.isChanged()) return lastPreparedSQL; //Cache
+
+		final String where, sql;
+		
+		if(whereClausel != null && !whereClausel.isEmpty()) {
+			where = " WHERE "+whereClausel.toPreparedSQL();
+		} else where = "";
+		
+		sql = "DELETE FROM `"+table+"`"+ where;
+		
+		lastPreparedSQL = new PrepareEntry(sql, whereClausel.getAllValues().toArray());
+		changedPrepared = false;
+		
+		return lastPreparedSQL;
 	}
 
 }

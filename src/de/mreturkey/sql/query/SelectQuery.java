@@ -2,6 +2,8 @@ package de.mreturkey.sql.query;
 
 import java.util.ArrayList;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import de.mreturkey.sql.clausel.WhereClausel;
 import de.mreturkey.sql.util.OrderByEntry;
 import de.mreturkey.sql.util.PrepareEntry;
@@ -19,6 +21,19 @@ public class SelectQuery implements Query {
 	private String lastSQL;
 	private PrepareEntry lastPreparedSQL;
 	private boolean changed = true, changedPrepared = true;
+	
+	/**
+	 * Creates an empty SelectQuery
+	 */
+	public SelectQuery() {}
+	
+	/**
+	 * Creates a new SelectQuery with the given table name
+	 * @param table
+	 */
+	public SelectQuery(String table) {
+		this.table = table;
+	}
 	
 	@Override
 	public String getTable() {
@@ -65,7 +80,13 @@ public class SelectQuery implements Query {
 		changed = true;
 	}
 	
+	/**
+	 * Add column for this <code>SelectQuery</code><br>
+	 * If the given column is <code>null</code> it will not added.
+	 * @param column - if column is <code>null</code> it will not added.
+	 */
 	public void addColumn(String column) {
+		if(column == null) return;
 		if(columns == null) this.columns = new ArrayList<>();
 		this.columns.add(column);
 		changed = true;
@@ -113,7 +134,7 @@ public class SelectQuery implements Query {
 		select = "SELECT " + col + " FROM `" + table + "`";
 		
 		if(whereClausel != null && !whereClausel.isEmpty()) {
-			where = "WHERE "+whereClausel.toSQL();
+			where = " WHERE "+whereClausel.toSQL();
 		} else where = "";
 		
 		if(limit != -1) {
@@ -157,7 +178,7 @@ public class SelectQuery implements Query {
 		select = "SELECT " + col + " FROM `" + table + "`";
 		
 		if(whereClausel != null && !whereClausel.isEmpty()) {
-			where = "WHERE "+whereClausel.toPreparedSQL();
+			where = " WHERE "+whereClausel.toPreparedSQL();
 		} else where = "";
 		
 		if(limit != -1) {
@@ -174,7 +195,7 @@ public class SelectQuery implements Query {
 		
 		final String sql = select + where + extras;
 		
-		this.lastPreparedSQL = new PrepareEntry(sql, whereClausel.getEntries().toArray());
+		this.lastPreparedSQL = new PrepareEntry(sql, whereClausel != null ? whereClausel.getAllValues().toArray() : ArrayUtils.EMPTY_OBJECT_ARRAY);
 		this.changedPrepared = false;
 		
 		return this.lastPreparedSQL;

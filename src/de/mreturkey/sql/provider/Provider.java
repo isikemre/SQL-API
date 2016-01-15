@@ -1,6 +1,8 @@
 package de.mreturkey.sql.provider;
 
+import java.io.File;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import de.mreturkey.sql.database.DataBase;
 
@@ -25,5 +27,13 @@ public interface Provider {
 	 * Opens a connection to the sql database
 	 */
 	Connection openConnection(DataBase database) throws SQLException;
+	
+	boolean fromXML(File xml);
+	
+	boolean fromYAML(File yaml);
+	
+	boolean fromProperties(Properties properties);
+	
+	boolean fromJSON(File json);
 
 }

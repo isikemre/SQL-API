@@ -17,4 +17,8 @@ public class PrepareEntry {
 	public Object[] getArgs() {
 		return args;
 	}
+	
+	public boolean isEmpty() {
+		return args.length <= 0;
+	}
 }
