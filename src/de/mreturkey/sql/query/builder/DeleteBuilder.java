@@ -1,11 +1,10 @@
 package de.mreturkey.sql.query.builder;
 
 import java.sql.SQLException;
-import java.sql.SQLTimeoutException;
 
 import de.mreturkey.sql.clausel.WhereClausel;
 import de.mreturkey.sql.operator.LogicalOperator;
-import de.mreturkey.sql.provider.Provider;
+import de.mreturkey.sql.provider.Connection;
 import de.mreturkey.sql.query.DeleteQuery;
 import de.mreturkey.sql.result.Result;
 import de.mreturkey.sql.util.WhereEntry;
@@ -43,20 +42,12 @@ public class DeleteBuilder implements Builder {
 		return where(new WhereEntry<V>(column, operator, value, null));
 	}
 	
-	public Result execute(Provider provider) throws SQLTimeoutException, SQLException {
+	public Result execute(Connection connection) throws SQLException {
 		final DeleteQuery dq = new DeleteQuery();
 		
 		dq.setTable(table);
 		dq.setWhereClausel(whereClausel);
 		
-		return provider.delete(dq);
-	}
-	
-	public String test() {
-		final DeleteQuery dq = new DeleteQuery();
-		
-		dq.setTable(table);
-		dq.setWhereClausel(whereClausel);
-		return dq.toSQL();
+		return connection.delete(dq);
 	}
 }

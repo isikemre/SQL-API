@@ -4,11 +4,13 @@ import de.mreturkey.sql.provider.MySQL;
 import de.mreturkey.sql.provider.Provider;
 import de.mreturkey.sql.provider.ProviderType;
 import de.mreturkey.sql.provider.SQLite;
+import de.mreturkey.sql.query.builder.BuildManager;
 
 public final class API {
 
 	private final static MySQL MYSQL_PROVIDER = new MySQL();
 	private final static SQLite SQLITE_PROVIDER = new SQLite();
+	private final static BuildManager BUILDER = new BuildManager();
 	
 	private API() {}
 	
@@ -38,6 +40,10 @@ public final class API {
 		default:
 			throw new IllegalArgumentException("provider not found.");
 		}
+	}
+	
+	public static BuildManager getBuilder() {
+		return BUILDER;
 	}
 	
 }

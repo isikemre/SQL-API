@@ -6,7 +6,7 @@ import java.util.HashMap;
 
 import de.mreturkey.sql.clausel.WhereClausel;
 import de.mreturkey.sql.operator.LogicalOperator;
-import de.mreturkey.sql.provider.Provider;
+import de.mreturkey.sql.provider.Connection;
 import de.mreturkey.sql.query.UpdateQuery;
 import de.mreturkey.sql.result.Result;
 import de.mreturkey.sql.util.WhereEntry;
@@ -55,20 +55,12 @@ public class UpdateBuilder implements Builder {
 		return where(new WhereEntry<V>(column, operator, value, null));
 	}
 	
-	public Result execute(Provider provider) throws SQLTimeoutException, SQLException {
+	public Result execute(Connection connection) throws SQLTimeoutException, SQLException {
 		final UpdateQuery uq = new UpdateQuery(values);
 		
 		uq.setTable(table);
 		uq.setWhereClausel(whereClausel);
 		
-		return provider.update(uq);
-	}
-	
-	public String test() {
-		final UpdateQuery uq = new UpdateQuery(values);
-		
-		uq.setTable(table);
-		uq.setWhereClausel(whereClausel);
-		return uq.toSQL();
+		return connection.update(uq);
 	}
 }

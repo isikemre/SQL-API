@@ -1,10 +1,9 @@
 package de.mreturkey.sql.query.builder;
 
 import java.sql.SQLException;
-import java.sql.SQLTimeoutException;
 import java.util.HashMap;
 
-import de.mreturkey.sql.provider.Provider;
+import de.mreturkey.sql.provider.Connection;
 import de.mreturkey.sql.query.InsertQuery;
 import de.mreturkey.sql.result.Result;
 
@@ -45,19 +44,11 @@ public class InsertBuilder implements Builder {
 		return this;
 	}
 	
-	public Result execute(Provider provider) throws SQLTimeoutException, SQLException {
+	public Result execute(Connection connection) throws SQLException {
 		final InsertQuery iq = new InsertQuery(values);
 		
 		iq.setTable(table);
 		
-		return provider.insert(iq);
-	}
-	
-	public String test() {
-		final InsertQuery iq = new InsertQuery(values);
-		
-		iq.setTable(table);
-		
-		return iq.toSQL();
+		return connection.insert(iq);
 	}
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import de.mreturkey.sql.clausel.OrderBy;
 import de.mreturkey.sql.clausel.WhereClausel;
 import de.mreturkey.sql.operator.LogicalOperator;
-import de.mreturkey.sql.provider.Provider;
+import de.mreturkey.sql.provider.Connection;
 import de.mreturkey.sql.query.SelectQuery;
 import de.mreturkey.sql.result.Result;
 import de.mreturkey.sql.util.OrderByEntry;
@@ -85,7 +85,7 @@ public class SelectBuilder {
 		return this;
 	}
 	
-	public Result execute(Provider provider) throws SQLTimeoutException, SQLException {
+	public Result execute(Connection connection) throws SQLTimeoutException, SQLException {
 		final SelectQuery sq = new SelectQuery();
 		
 		sq.setTable(table);
@@ -95,17 +95,6 @@ public class SelectBuilder {
 		sq.setOrderBy(orderBy);
 		sq.setWhereClausel(whereClausel);
 		
-		return provider.select(sq);
-	}
-	
-	public String test() {
-		final SelectQuery sq = new SelectQuery();
-		sq.setTable(table);
-		sq.setColumns(columns);
-		sq.setLimit(limit);
-		sq.setOffset(offset);
-		sq.setOrderBy(orderBy);
-		sq.setWhereClausel(whereClausel);
-		return sq.toSQL();
+		return connection.select(sq);
 	}
 }
