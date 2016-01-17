@@ -1,66 +1,66 @@
 package de.mreturkey.sql.provider;
 
+import java.io.File;
 import java.sql.SQLException;
-import java.sql.SQLTimeoutException;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteDataSource;
 
-import de.mreturkey.sql.clausel.WhereClausel;
 import de.mreturkey.sql.database.DataBase;
 import de.mreturkey.sql.database.SQLiteDataBase;
-import de.mreturkey.sql.query.DeleteQuery;
-import de.mreturkey.sql.query.InsertQuery;
-import de.mreturkey.sql.query.SelectQuery;
-import de.mreturkey.sql.query.UpdateQuery;
-import de.mreturkey.sql.result.Result;
 
 public class SQLite implements Provider {
 
-	private DataSource dataSource;
-	private Connection connection;
-	
-	public SQLite() {
-		// TODO Auto-generated constructor stub	
-	}
-	
-	public SQLite(SQLiteDataBase dataBase) {
-		// TODO
-	}
-	
+	@Override
 	public Connection openConnection(DataBase database) throws SQLException {
 		if(database == null) throw new NullPointerException("database cannot be null");
-		
-		final SQLiteConfig config = new SQLiteConfig();
-		
-		final SQLiteDataSource sqlite = new SQLiteDataSource();
-		
-//		dataSource = mysql;
-//		connection = dataSource.getConnection();
-		
-		return connection;
+		if(!(database instanceof SQLiteDataBase)) throw new IllegalArgumentException("database must be a SQLiteDataBase Object");
+		return openConnection(database);
 	}
 	
-	public void close() throws SQLException {
-		if(isConnected()) {
-			connection.close();
-			connection = null;				
-		}
-	}
-	
-	public boolean isConnected() {
-		try {
-			return connection != null && !connection.isClosed();
-		} catch (SQLException e) {
-			return false;
-		}
+	public Connection openConnection(SQLiteDataBase database) throws SQLException {
+		if(database == null) throw new NullPointerException("database cannot be null");
+//		final MysqlDataSource mysql = new MysqlDataSource();
+//		mysql.setURL("jdbc:mysql://"+database.getHost()+":"+database.getPort()+"/"+database.getDatabase());
+//		mysql.setUser(database.getUser());
+//		mysql.setPassword(database.getPassword());
+		
+		final SQLiteDataSource sqlite = new SQLiteDataSource(database.getConfig());
+		
+		DataSource dataSource = sqlite;
+		java.sql.Connection connection = (java.sql.Connection) dataSource.getConnection();
+		return new ProviderConnection(connection);
 	}
 	
 	@Override
 	public String getProviderName() {
 		return "sqlite";
+	}
+
+	@Override
+	public boolean fromXML(File xml) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean fromYAML(File yaml) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean fromProperties(Properties properties) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean fromJSON(File json) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

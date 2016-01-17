@@ -13,7 +13,7 @@ public final class CacheManager {
 	private static final CacheChecker checker = new CacheChecker();
 	private static boolean running = false;
 	
-	protected final static List<Cache> CACHES = Collections.synchronizedList(new ArrayList<>(250));
+	protected final static List<Object> CACHES = Collections.synchronizedList(new ArrayList<>(250));
 	
 	private CacheManager() {/* only static */} 
 	
@@ -53,7 +53,7 @@ class CacheChecker implements Runnable {
 			while(true) {
 				Thread.sleep(toWait);
 				synchronized (CacheManager.CACHES) {
-					for(Cache cache : CacheManager.CACHES) {
+					for(Object cache : CacheManager.CACHES) {
 						
 					}
 				}

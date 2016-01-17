@@ -1,7 +1,9 @@
 package de.mreturkey.sql.database;
 
-import de.mreturkey.sql.provider.MySQL;
-import de.mreturkey.sql.provider.Provider;
+import java.sql.SQLException;
+
+import de.mreturkey.sql.api.API;
+import de.mreturkey.sql.provider.Connection;
 import de.mreturkey.sql.provider.ProviderType;
 
 public class MySQLDataBase implements DataBase {
@@ -38,8 +40,8 @@ public class MySQLDataBase implements DataBase {
 	}
 	
 	@Override
-	public Provider openConnection() {
-		return new MySQL(this);
+	public Connection openConnection() throws SQLException {
+		return API.getProvider(ProviderType.MYSQL).openConnection(this);
 	}
 
 	@Override

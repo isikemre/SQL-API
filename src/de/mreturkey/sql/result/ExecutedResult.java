@@ -58,8 +58,12 @@ public class ExecutedResult implements Result {
 			vals.add(tmp);
 		}
 		
+		Object[][] theVals ={};
+		int b = 0;
 		for(Object[] o : vals) {
-			
+			for(Object t : o) {
+				
+			}
 		}
 		
 		if(row == -1) return null;

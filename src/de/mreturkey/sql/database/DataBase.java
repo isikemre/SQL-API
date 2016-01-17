@@ -1,11 +1,13 @@
 package de.mreturkey.sql.database;
 
-import de.mreturkey.sql.provider.Provider;
+import java.sql.SQLException;
+
+import de.mreturkey.sql.provider.Connection;
 import de.mreturkey.sql.provider.ProviderType;
 
 public interface DataBase {
 
-	Provider openConnection();
+	Connection openConnection() throws SQLException;
 	
 	ProviderType getType();
 	
