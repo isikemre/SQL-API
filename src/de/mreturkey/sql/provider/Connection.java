@@ -213,6 +213,8 @@ public interface Connection {
 	 */
 	Result delete(String table, WhereClausel where) throws SQLException;
 	
+	Result createTable(String name, )
+	
 	/**
 	 * Returns the {@link java.sql.Connection} of this Connection
 	 * @return the {@link java.sql.Connection} of this Connection

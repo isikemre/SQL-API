@@ -18,4 +18,7 @@ public interface Result {
 	
 	Object[][] getValues() throws SQLException;
 	
+	ResultState getState();
+	
+	boolean isNull() throws SQLException;
 }

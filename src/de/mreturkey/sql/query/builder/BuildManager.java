@@ -1,23 +1,13 @@
 package de.mreturkey.sql.query.builder;
 
-public class BuildManager {
+public interface BuildManager {
 	
-	public BuildManager() {}
+	SelectBuilder select();
 	
-	public SelectBuilder buildSelect() {
-		return new SelectBuilder();
-	}
+	InsertBuilder insert();
 	
-	public InsertBuilder buildInsert() {
-		return new InsertBuilder();
-	}
+	UpdateBuilder update();
 	
-	public UpdateBuilder buildUpdate() {
-		return new UpdateBuilder();
-	}
+	DeleteBuilder delete();
 	
-	public DeleteBuilder buildDelete() {
-		return new DeleteBuilder();
-	}
-
 }

@@ -17,17 +17,14 @@ public class SQLite implements Provider {
 	public Connection openConnection(DataBase database) throws SQLException {
 		if(database == null) throw new NullPointerException("database cannot be null");
 		if(!(database instanceof SQLiteDataBase)) throw new IllegalArgumentException("database must be a SQLiteDataBase Object");
-		return openConnection(database);
+		return openConnection((SQLiteDataBase) database);
 	}
 	
 	public Connection openConnection(SQLiteDataBase database) throws SQLException {
 		if(database == null) throw new NullPointerException("database cannot be null");
-//		final MysqlDataSource mysql = new MysqlDataSource();
-//		mysql.setURL("jdbc:mysql://"+database.getHost()+":"+database.getPort()+"/"+database.getDatabase());
-//		mysql.setUser(database.getUser());
-//		mysql.setPassword(database.getPassword());
-		
+
 		final SQLiteDataSource sqlite = new SQLiteDataSource(database.getConfig());
+		sqlite.setUrl("jdbc:sqlite:"+database.getFile().getAbsolutePath());
 		
 		DataSource dataSource = sqlite;
 		java.sql.Connection connection = (java.sql.Connection) dataSource.getConnection();

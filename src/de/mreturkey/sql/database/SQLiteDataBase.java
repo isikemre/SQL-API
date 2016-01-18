@@ -27,7 +27,7 @@ public class SQLiteDataBase implements DataBase {
 		this.config = config;
 	}
 	
-	public File getDatabaseFile() {
+	public File getFile() {
 		return databaseFile;
 	}
 	

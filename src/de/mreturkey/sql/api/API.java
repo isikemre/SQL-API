@@ -5,12 +5,13 @@ import de.mreturkey.sql.provider.Provider;
 import de.mreturkey.sql.provider.ProviderType;
 import de.mreturkey.sql.provider.SQLite;
 import de.mreturkey.sql.query.builder.BuildManager;
+import de.mreturkey.sql.query.builder.IBuildManager;
 
 public final class API {
 
 	private final static MySQL MYSQL_PROVIDER = new MySQL();
 	private final static SQLite SQLITE_PROVIDER = new SQLite();
-	private final static BuildManager BUILDER = new BuildManager();
+	private final static BuildManager BUILDER = new IBuildManager();
 	
 	private API() {}
 	
