@@ -3,10 +3,12 @@ package de.mreturkey.sql.clausel;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.mreturkey.sql.operator.ComparisonOperator;
 import de.mreturkey.sql.operator.LogicalOperator;
+import de.mreturkey.sql.util.SQLSerializable;
 import de.mreturkey.sql.util.WhereEntry;
 
-public class WhereClausel implements Clausel {
+public class WhereClause implements Clause, SQLSerializable {
 	
 	/**
 	 * The first (index:0) entry in this list is the main WhereEntry.<br>
@@ -16,19 +18,39 @@ public class WhereClausel implements Clausel {
 	private String lastSQL, lastPreparedSQL;
 	private boolean changed = true, changedPrepared = true;
 	
-	public WhereClausel(WhereEntry<?>... entries) {
+	/**
+	 * Constructs a <code>WhereClause</code> with the given "where entries"<br>
+	 * You can still add more entries, if you want to.
+	 * @param entries 
+	 */
+	public WhereClause(WhereEntry<?>... entries) {
 		this.entries = new ArrayList<>();
 		for(WhereEntry<?> we : entries) this.add(we);
 	}
 	
-	public <V> WhereClausel(String column, String operator, V value) {
+	/**
+	 * Constructs a <code>WhereClause</code> with the given arguments<br>
+	 * You can still add more entries, if you want to.
+	 * @param column
+	 * @param operator
+	 * @param value
+	 */
+	public <V> WhereClause(String column, String operator, V value) {
 		this(new WhereEntry<V>(column, operator, value, null));
 	}
 
-	public WhereClausel() {
+	/**
+	 * Constructs a <code>WhereClause</code> which allows you to add entries<br>
+	 */
+	public WhereClause() {
 		this.entries = new ArrayList<>();
 	}
 	
+	/**
+	 * Appends the given <code>WhereEntry</code>, with the specified class type, to the list of entries<br>
+	 * The first added entry will be used as main entry.
+	 * @param entry the entry which contains all informations about a part of the whole <code>WHERE</code> Clause
+	 */
 	public <V> void add(WhereEntry<V> entry) {
 		if(entries.isEmpty()) {
 			entries.add(entry);
@@ -38,11 +60,26 @@ public class WhereClausel implements Clausel {
 		}
 		changed = true;
 	}
+	
+	/**
+	 * Constructs at first a <code>WhereEntry</code> with all given arguments and then appends the created entry to the list of entries.<br>
+	 * The first added entry will be used as main entry.
+	 * @param column name of the column (ex. <code>id</code>)
+	 * @param operator the operator which compares the value in the query with the given value
+	 * (ex. <code>=</code>, <code>LIKE</code> or <code>></code>)
+	 * You can use the {@link ComparisonOperator} enum
+	 * @param value the value which will be compared
+	 * @param logicalOperator if you added more than one entry, you need to add a {@link LogicalOperator} (ex. <code>AND</code>). If this argument is null, it will be the main entry.
+	 */
 	public <V> void add(String column, String operator, V value, LogicalOperator logicalOperator) {
 		add(new WhereEntry<V>(column, operator, value, logicalOperator));
 	}
 	
-	
+	/**
+	 * Adds the main entry to the list of entries.<br>
+	 * The main entry is the first entry in the list. You don't need a {@link LogicalOperator} for the main entry.
+	 * @param entry
+	 */
 	public <V> void main(WhereEntry<V> entry) {
 		if(entries.isEmpty()) {
 			entries.add(entry);
@@ -51,10 +88,24 @@ public class WhereClausel implements Clausel {
 		}
 		changed = true;
 	}
+	
+	/**
+	 * Constructs at first a <code>WhereEntry</code> with all the given arguments and then sets the created entry as main entry to the list of entries.<br>
+	 * The main entry is the first entry in the list. You don't need a {@link LogicalOperator} for the main entry.
+	 * @param column name of the column (ex. <code>id</code>)
+	 * @param operator the operator which compares the value in the query with the given value
+	 * (ex. <code>=</code>, <code>LIKE</code> or <code>></code>)
+	 * You can use the {@link ComparisonOperator} enum
+	 * @param value the value which will be compared
+	 */
 	public <V> void main(String column, String operator, V value) {
 		main(new WhereEntry<V>(column, operator, value, null));
 	}
 	
+	/**
+	 * IM here TODO
+	 * @param entry
+	 */
 	public <V> void and(WhereEntry<V> entry) {
 		checkMainEntry();
 		if(entry.getLogicalOperator() != LogicalOperator.AND) throw new IllegalArgumentException("LogicalOperator is not AND");

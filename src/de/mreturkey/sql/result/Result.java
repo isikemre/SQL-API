@@ -20,5 +20,10 @@ public interface Result {
 	
 	ResultState getState();
 	
+	/**
+	 * In SQLite you cannot check wheter there are values in the result set
+	 * @return boolean
+	 * @throws SQLException
+	 */
 	boolean isNull() throws SQLException;
 }

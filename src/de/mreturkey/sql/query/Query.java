@@ -15,10 +15,4 @@ public interface Query {
 	 * @return the type of the query
 	 */
 	QueryType getType();
-	
-	/**
-	 * TODO junge
-	 * @return
-	 */
-	String toSQL();
 }

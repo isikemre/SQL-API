@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Deprecated //Wait for a nice idea. :)
 public final class CacheManager {
 
 	private static final ExecutorService fixedPool = Executors.newFixedThreadPool(1);
@@ -54,7 +53,7 @@ class CacheChecker implements Runnable {
 				Thread.sleep(toWait);
 				synchronized (CacheManager.CACHES) {
 					for(Object cache : CacheManager.CACHES) {
-						
+						cache.toString();
 					}
 				}
 			}

@@ -2,7 +2,7 @@ package de.mreturkey.sql.query.builder;
 
 import java.sql.SQLException;
 
-import de.mreturkey.sql.clausel.WhereClausel;
+import de.mreturkey.sql.clausel.WhereClause;
 import de.mreturkey.sql.operator.LogicalOperator;
 import de.mreturkey.sql.provider.Connection;
 import de.mreturkey.sql.query.DeleteQuery;
@@ -12,7 +12,7 @@ import de.mreturkey.sql.util.WhereEntry;
 public class DeleteBuilder implements Builder {
 	
 	private String table;
-	private final WhereClausel whereClausel = new WhereClausel();
+	private final WhereClause whereClausel = new WhereClause();
 	
 	protected DeleteBuilder() {} //only Builder can access
 	
@@ -20,7 +20,7 @@ public class DeleteBuilder implements Builder {
 		return table;
 	}
 	
-	public WhereClausel getWhereClausel() {
+	public WhereClause getWhereClausel() {
 		return whereClausel;
 	}
 	

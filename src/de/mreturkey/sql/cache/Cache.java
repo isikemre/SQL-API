@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import de.mreturkey.sql.result.CachedResult;
 
-@Deprecated ////Wait for a nice idea. :)
 public class Cache {
 
 	private final int id;

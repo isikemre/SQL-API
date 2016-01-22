@@ -1,10 +1,18 @@
 package de.mreturkey.sql.provider;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.xml.sax.SAXException;
+
+import com.google.gson.JsonSyntaxException;
+
 import de.mreturkey.sql.database.DataBase;
+import de.mreturkey.sql.table.Engine;
+import de.mreturkey.sql.table.Table;
 
 /**
  * Represents a SQL-Provider
@@ -24,16 +32,32 @@ public interface Provider {
 	String getProviderName();
 	
 	/**
-	 * Opens a connection to the sql database
+	 * Returns the type of this provider.
+	 * @return type of provider
+	 */
+	ProviderType getType();
+	
+	Table createTable(String name);
+	
+	Table createTable(String name, Engine engine);
+	
+	/**
+	 * Opens a connection to the database
 	 */
 	Connection openConnection(DataBase database) throws SQLException;
 	
-	boolean fromXML(File xml);
+	Connection fromXML(File file) throws SAXException, IOException, NumberFormatException, SQLException;
 	
-	boolean fromYAML(File yaml);
+	Connection fromYAML(File file) throws SQLException;
 	
-	boolean fromProperties(Properties properties);
+	Connection fromYAML(YamlConfiguration yaml) throws SQLException;
+
+	Connection fromYAML(YamlConfiguration yaml, String prefixPath) throws SQLException;
 	
-	boolean fromJSON(File json);
+	Connection fromProperties(Properties properties) throws NumberFormatException, SQLException;
+	
+	Connection fromJSON(File file) throws JsonSyntaxException, IOException, SQLException;
+	
+	Connection fromJSON(String json) throws JsonSyntaxException, IOException, SQLException;
 
 }

@@ -3,12 +3,13 @@ package de.mreturkey.sql.provider;
 import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
 
-import de.mreturkey.sql.clausel.WhereClausel;
+import de.mreturkey.sql.clausel.WhereClause;
 import de.mreturkey.sql.query.DeleteQuery;
 import de.mreturkey.sql.query.InsertQuery;
 import de.mreturkey.sql.query.SelectQuery;
 import de.mreturkey.sql.query.UpdateQuery;
 import de.mreturkey.sql.result.Result;
+import de.mreturkey.sql.table.Table;
 
 /**
  * Represents a QueryProvider
@@ -97,7 +98,7 @@ public interface Connection {
 	Result select(String table, String... columns) throws SQLException;
 	
 	/**
-	 * Executes a <code>SELECT</code> Statement in all columns, the given table and the given {@link WhereClausel}<br>
+	 * Executes a <code>SELECT</code> Statement in all columns, the given table and the given {@link WhereClause}<br>
 	 * and returns the {@link Result} of the executed query.
 	 * <br><b>Query Example:</b>
 	 * <blockquote><code>SELECT * FROM {table} WHERE {whereClausel}</code></blockquote>
@@ -106,10 +107,10 @@ public interface Connection {
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
 	 */
-	Result select(String table, WhereClausel where) throws SQLException;
+	Result select(String table, WhereClause where) throws SQLException;
 	
 	/**
-	 * Executes a <code>SELECT</code> Statement in the given column, the given table and the given {@link WhereClausel}<br>
+	 * Executes a <code>SELECT</code> Statement in the given column, the given table and the given {@link WhereClause}<br>
 	 * and returns the {@link Result} of the executed query.
 	 * <br><b>Query Example:</b>
 	 * <blockquote><code>SELECT {column} FROM {table} WHERE {whereClausel}</code></blockquote>
@@ -117,10 +118,10 @@ public interface Connection {
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
 	 */
-	Result select(String table, String column, WhereClausel where) throws SQLException;
+	Result select(String table, String column, WhereClause where) throws SQLException;
 	
 	/**
-	 * Executes a <code>SELECT</code> Statement in the given columns, the given table and the given {@link WhereClausel}<br>
+	 * Executes a <code>SELECT</code> Statement in the given columns, the given table and the given {@link WhereClause}<br>
 	 * and returns the {@link Result} of the executed query.
 	 * <br><b>Query Example:</b>
 	 * <blockquote><code>SELECT {columns...} FROM {table} WHERE {whereClausel}</code></blockquote>
@@ -130,7 +131,7 @@ public interface Connection {
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
 	 */
-	Result select(String table, WhereClausel where, String... columns) throws SQLException;
+	Result select(String table, WhereClause where, String... columns) throws SQLException;
 	
 	/**
 	 * Executes a <code>INSERT</code> Statement with the given {@link InsertQuery}<br>
@@ -173,7 +174,7 @@ public interface Connection {
 	Result update(String table, String[] columns, Object[] values) throws SQLException;
 	
 	/**
-	 * Executes a <code>UPDATE</code> Statement with the given columns, values, table and {@link WhereClausel}<br>
+	 * Executes a <code>UPDATE</code> Statement with the given columns, values, table and {@link WhereClause}<br>
 	 * and returns the {@link Result} of the executed query.
 	 * @param table
 	 * @param columns
@@ -182,7 +183,7 @@ public interface Connection {
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
 	 */
-	Result update(String table, String[] columns, Object[] values, WhereClausel where) throws SQLException;
+	Result update(String table, String[] columns, Object[] values, WhereClause where) throws SQLException;
 	
 	/**
 	 * Executes a <code>DELETE</code> Statement with the given {@link DeleteQuery}<br>
@@ -205,20 +206,22 @@ public interface Connection {
 	Result delete(String table) throws SQLException;
 	
 	/**
-	 * Executes a <code>DELETE</code> Statement with the given table and {@link WhereClausel}<br>
+	 * Executes a <code>DELETE</code> Statement with the given table and {@link WhereClause}<br>
 	 * @param table
 	 * @param where
 	 * @return the {@link Result} of the executed query.
 	 * @throws SQLException if a database access error occurs; this method is called on a closed <code>PreparedStatement</code> or the SQL statement does not return a <code>ResultSet</code> object
 	 */
-	Result delete(String table, WhereClausel where) throws SQLException;
-	
-	Result createTable(String name, )
-	
+	Result delete(String table, WhereClause where) throws SQLException;
+
+	void queryTable(Table table) throws SQLException;
+
+	void queryTable(Table table, boolean createIfNotExists) throws SQLException;
+
 	/**
 	 * Returns the {@link java.sql.Connection} of this Connection
 	 * @return the {@link java.sql.Connection} of this Connection
 	 */
 	java.sql.Connection getSQLConnection();
-	
+
 }

@@ -2,7 +2,7 @@ package de.mreturkey.sql.util;
 
 import de.mreturkey.sql.operator.LogicalOperator;
 
-public class WhereEntry<V> {
+public class WhereEntry<V> implements SQLSerializable {
 
 	private final String column, operator;
 	private final LogicalOperator logicalOperator;

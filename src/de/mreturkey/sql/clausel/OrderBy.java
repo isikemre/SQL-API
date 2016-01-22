@@ -1,6 +1,8 @@
 package de.mreturkey.sql.clausel;
 
-public enum OrderBy implements Clausel {
+import de.mreturkey.sql.util.SQLSerializable;
+
+public enum OrderBy implements Clause, SQLSerializable {
 	
 	ASC,
 	DESC;

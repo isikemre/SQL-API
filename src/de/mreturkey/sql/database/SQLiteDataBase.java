@@ -10,9 +10,14 @@ import de.mreturkey.sql.provider.Connection;
 import de.mreturkey.sql.provider.ProviderType;
 
 public class SQLiteDataBase implements DataBase {
-
+	
+	private final String filePath;
 	private final File databaseFile;
 	private final SQLiteConfig config;
+	
+	public SQLiteDataBase(String filePath) {
+		this(new File(filePath));
+	}
 	
 	public SQLiteDataBase(File databaseFile) {
 		this(databaseFile, new SQLiteConfig());
@@ -25,6 +30,7 @@ public class SQLiteDataBase implements DataBase {
 	public SQLiteDataBase(File databaseFile, SQLiteConfig config) {
 		this.databaseFile = databaseFile;
 		this.config = config;
+		this.filePath = databaseFile.getAbsolutePath();
 	}
 	
 	public File getFile() {
@@ -33,6 +39,10 @@ public class SQLiteDataBase implements DataBase {
 	
 	public SQLiteConfig getConfig() {
 		return config;
+	}
+	
+	public String getFilePath() {
+		return filePath;
 	}
 	
 	@Override

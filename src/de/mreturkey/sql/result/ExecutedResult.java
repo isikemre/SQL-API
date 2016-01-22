@@ -49,6 +49,7 @@ public class ExecutedResult implements Result {
 	@Override
 	public Object[][] getValues() throws SQLException {
 		if(!resultSet.last()) return null;
+		if(values != null) return values;
 		final int columnCount = resultSet.getMetaData().getColumnCount();
 		Object[][] vals = new Object[resultSet.getRow()][columnCount];
 		resultSet.beforeFirst();
@@ -58,7 +59,7 @@ public class ExecutedResult implements Result {
 				vals[(resultSet.getRow() - 1)][i] = resultSet.getObject((i + 1));
 			}
 		}
-		
+		this.values = vals;
 		return vals;
 	}
 
@@ -69,13 +70,17 @@ public class ExecutedResult implements Result {
 
 	@Override
 	public boolean isNull() throws SQLException {
-		if(resultSet.first()) {
-			resultSet.beforeFirst();
-			return false;
-		} else {
-			resultSet.beforeFirst();
-			return true;
+		if(resultSet == null) return true;
+		if(resultSet.getType() != ResultSet.TYPE_FORWARD_ONLY) {
+			if(resultSet.first()) {
+				resultSet.beforeFirst();
+				return false;
+			} else {
+				resultSet.beforeFirst();
+				return true;
+			}
 		}
+		return false;
 	}
 	
 }

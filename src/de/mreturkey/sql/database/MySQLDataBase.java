@@ -12,6 +12,10 @@ public class MySQLDataBase implements DataBase {
 	private final int port;
 	
 	public MySQLDataBase(String host, int port, String database, String user, String password) {
+		if(host == null) throw new NullPointerException("host cannot be null");
+		if(port <= 0 || port > 65535) throw new IllegalArgumentException("port number need to be in the range of 1 to 65535");
+		if(database == null) throw new NullPointerException("database cannot be null");
+		
 		this.host = host;
 		this.port = port;
 		this.database = database;

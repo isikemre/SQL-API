@@ -8,8 +8,9 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.ArrayUtils;
 
 import de.mreturkey.sql.util.PrepareEntry;
+import de.mreturkey.sql.util.SQLSerializable;
 
-public class InsertQuery implements Query {
+public class InsertQuery implements Query, SQLSerializable {
 
 	private String table;
 	private final HashMap<String, String> values;

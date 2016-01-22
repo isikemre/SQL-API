@@ -6,13 +6,14 @@ import java.sql.SQLTimeoutException;
 import java.sql.Statement;
 import java.util.HashMap;
 
-import de.mreturkey.sql.clausel.WhereClausel;
+import de.mreturkey.sql.clausel.WhereClause;
 import de.mreturkey.sql.query.DeleteQuery;
 import de.mreturkey.sql.query.InsertQuery;
 import de.mreturkey.sql.query.SelectQuery;
 import de.mreturkey.sql.query.UpdateQuery;
 import de.mreturkey.sql.result.ExecutedResult;
 import de.mreturkey.sql.result.Result;
+import de.mreturkey.sql.table.Table;
 import de.mreturkey.sql.util.PrepareEntry;
 
 public class ProviderConnection implements Connection {
@@ -85,14 +86,14 @@ public class ProviderConnection implements Connection {
 	}
 
 	@Override
-	public Result select(String table, WhereClausel where) throws SQLException, SQLTimeoutException {
+	public Result select(String table, WhereClause where) throws SQLException, SQLTimeoutException {
 		final SelectQuery sq = new SelectQuery(table);
 		sq.setWhereClausel(where);
 		return select(sq);
 	}
 
 	@Override
-	public Result select(String table, String column, WhereClausel where) throws SQLException, SQLTimeoutException {
+	public Result select(String table, String column, WhereClause where) throws SQLException, SQLTimeoutException {
 		final SelectQuery sq = new SelectQuery(table);
 		sq.addColumn(column);
 		sq.setWhereClausel(where);
@@ -100,7 +101,7 @@ public class ProviderConnection implements Connection {
 	}
 
 	@Override
-	public Result select(String table, WhereClausel where, String... columns) throws SQLException, SQLTimeoutException {
+	public Result select(String table, WhereClause where, String... columns) throws SQLException, SQLTimeoutException {
 		final SelectQuery sq = new SelectQuery(table);
 		sq.setWhereClausel(where);
 		for(String col : columns) sq.addColumn(col);
@@ -114,7 +115,8 @@ public class ProviderConnection implements Connection {
 		
 		int i = 1;
 		for(Object o : pe.getArgs()) ps.setObject(i++, o);
-		return new ExecutedResult(ps.executeQuery(), insertQuery);
+		ps.executeUpdate();
+		return new ExecutedResult(null, insertQuery);
 	}
 
 	@Override
@@ -144,7 +146,7 @@ public class ProviderConnection implements Connection {
 	}
 
 	@Override
-	public Result update(String table, String[] columns, Object[] values, WhereClausel where) throws SQLException, SQLTimeoutException {
+	public Result update(String table, String[] columns, Object[] values, WhereClause where) throws SQLException, SQLTimeoutException {
 		if(columns.length != values.length) throw new IllegalArgumentException("The length of the given columns and values doesn't match! There are columns or values missing");
 		final HashMap<String, String> map = new HashMap<>();
 		for(int i = 0; i < values.length; i++) map.put(columns[i], values[i].toString());
@@ -167,13 +169,23 @@ public class ProviderConnection implements Connection {
 	}
 
 	@Override
-	public Result delete(String table, WhereClausel where) throws SQLException, SQLTimeoutException {
+	public Result delete(String table, WhereClause where) throws SQLException, SQLTimeoutException {
 		return delete(new DeleteQuery(table, where));
 	}
 
 	@Override
 	public java.sql.Connection getSQLConnection() {
 		return connection;
+	}
+
+	@Override
+	public void queryTable(Table table) throws SQLException {
+		this.updateQuery(table.toSQL());
+	}
+
+	@Override
+	public void queryTable(Table table, boolean createIfNotExists) throws SQLException {
+		this.updateQuery(table.toSQL(createIfNotExists));
 	}
 
 }

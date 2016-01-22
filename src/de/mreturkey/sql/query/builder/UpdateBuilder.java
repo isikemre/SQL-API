@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
 import java.util.HashMap;
 
-import de.mreturkey.sql.clausel.WhereClausel;
+import de.mreturkey.sql.clausel.WhereClause;
 import de.mreturkey.sql.operator.LogicalOperator;
 import de.mreturkey.sql.provider.Connection;
 import de.mreturkey.sql.query.UpdateQuery;
@@ -15,7 +15,7 @@ public class UpdateBuilder implements Builder {
 
 	private String table;
 	private final HashMap<String, String> values = new HashMap<>();
-	private final WhereClausel whereClausel = new WhereClausel();
+	private final WhereClause whereClausel = new WhereClause();
 	
 	protected UpdateBuilder() {} //only Builder can access
 	
@@ -27,7 +27,7 @@ public class UpdateBuilder implements Builder {
 		return values;
 	}
 	
-	public WhereClausel getWhereClausel() {
+	public WhereClause getWhereClausel() {
 		return whereClausel;
 	}
 	

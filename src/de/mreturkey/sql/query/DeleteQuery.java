@@ -1,13 +1,14 @@
 package de.mreturkey.sql.query;
 
-import de.mreturkey.sql.clausel.WhereClausel;
+import de.mreturkey.sql.clausel.WhereClause;
 import de.mreturkey.sql.util.PrepareEntry;
+import de.mreturkey.sql.util.SQLSerializable;
 
-public class DeleteQuery implements Query {
+public class DeleteQuery implements Query, SQLSerializable {
 
 	private String table;
 	private final QueryType type = QueryType.DELETE;
-	private WhereClausel whereClausel;
+	private WhereClause whereClausel;
 	
 	private String lastSQL;
 	private PrepareEntry lastPreparedSQL;
@@ -19,11 +20,11 @@ public class DeleteQuery implements Query {
 		this.table = table;
 	}
 	
-	public DeleteQuery(WhereClausel whereClausel) {
+	public DeleteQuery(WhereClause whereClausel) {
 		this.whereClausel = whereClausel;
 	}
 	
-	public DeleteQuery(String table, WhereClausel whereClausel) {
+	public DeleteQuery(String table, WhereClause whereClausel) {
 		this.table = table;
 		this.whereClausel = whereClausel;
 	}
@@ -43,11 +44,11 @@ public class DeleteQuery implements Query {
 		return type;
 	}
 
-	public WhereClausel getWhereClausel() {
+	public WhereClause getWhereClausel() {
 		return whereClausel;
 	} 
 	
-	public void setWhereClausel(WhereClausel whereClausel) {
+	public void setWhereClausel(WhereClause whereClausel) {
 		this.whereClausel = whereClausel;
 	}
 	

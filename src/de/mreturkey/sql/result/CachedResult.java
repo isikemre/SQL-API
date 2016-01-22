@@ -36,4 +36,16 @@ public class CachedResult implements Result {
 		return null;
 	}
 
+	@Override
+	public ResultState getState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isNull() throws SQLException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -4,15 +4,16 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import de.mreturkey.sql.clausel.WhereClausel;
+import de.mreturkey.sql.clausel.WhereClause;
 import de.mreturkey.sql.util.OrderByEntry;
 import de.mreturkey.sql.util.PrepareEntry;
+import de.mreturkey.sql.util.SQLSerializable;
 
-public class SelectQuery implements Query {
+public class SelectQuery implements Query, SQLSerializable {
 
 	private String table;
 	private ArrayList<String> columns;
-	private WhereClausel whereClausel;
+	private WhereClause whereClausel;
 	private int offset = -1, limit = -1;
 	private OrderByEntry orderBy;
 	
@@ -49,7 +50,7 @@ public class SelectQuery implements Query {
 		return columns;
 	}
 
-	public WhereClausel getWhereClausel() {
+	public WhereClause getWhereClausel() {
 		return whereClausel;
 	}
 
@@ -92,7 +93,7 @@ public class SelectQuery implements Query {
 		changed = true;
 	}
 
-	public void setWhereClausel(WhereClausel whereClausel) {
+	public void setWhereClausel(WhereClause whereClausel) {
 		this.whereClausel = whereClausel;
 		changed = true;
 	}

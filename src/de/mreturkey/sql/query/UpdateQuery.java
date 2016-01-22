@@ -4,14 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-import de.mreturkey.sql.clausel.WhereClausel;
+import de.mreturkey.sql.clausel.WhereClause;
 import de.mreturkey.sql.util.PrepareEntry;
+import de.mreturkey.sql.util.SQLSerializable;
 
-public class UpdateQuery implements Query {
+public class UpdateQuery implements Query, SQLSerializable {
 
 	private String table;
 	private final HashMap<String, String> values;
-	private WhereClausel whereClausel;
+	private WhereClause whereClausel;
 	
 	private String lastSQL;
 	private PrepareEntry lastPreparedSQL;
@@ -39,7 +40,7 @@ public class UpdateQuery implements Query {
 		this.table = table;
 	}
 	
-	public UpdateQuery(String table, HashMap<String, String> values, WhereClausel whereClausel) {
+	public UpdateQuery(String table, HashMap<String, String> values, WhereClause whereClausel) {
 		if(values == null) values = new HashMap<>();
 		this.values = values;
 		this.table = table;
@@ -60,7 +61,7 @@ public class UpdateQuery implements Query {
 		return values;
 	}
 
-	public WhereClausel getWhereClausel() {
+	public WhereClause getWhereClausel() {
 		return whereClausel;
 	}
 
@@ -87,7 +88,7 @@ public class UpdateQuery implements Query {
 		changed = true;
 	}
 
-	public void setWhereClausel(WhereClausel whereClausel) {
+	public void setWhereClausel(WhereClause whereClausel) {
 		this.whereClausel = whereClausel;
 		changed = true;
 	}

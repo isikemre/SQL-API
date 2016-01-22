@@ -5,7 +5,7 @@ import java.sql.SQLTimeoutException;
 import java.util.ArrayList;
 
 import de.mreturkey.sql.clausel.OrderBy;
-import de.mreturkey.sql.clausel.WhereClausel;
+import de.mreturkey.sql.clausel.WhereClause;
 import de.mreturkey.sql.operator.LogicalOperator;
 import de.mreturkey.sql.provider.Connection;
 import de.mreturkey.sql.query.SelectQuery;
@@ -16,7 +16,7 @@ public class SelectBuilder {
 
 	private String table;
 	private ArrayList<String> columns;
-	private WhereClausel whereClausel;
+	private WhereClause whereClausel;
 	private int offset = -1, limit = -1;
 	private OrderByEntry orderBy;
 	
@@ -28,7 +28,7 @@ public class SelectBuilder {
 	public ArrayList<String> getColumns() {
 		return columns;
 	}
-	public WhereClausel getWhereClausel() {
+	public WhereClause getWhereClausel() {
 		return whereClausel;
 	}
 	public int getOffset() {
@@ -59,13 +59,13 @@ public class SelectBuilder {
 	}
 	
 	public <V> SelectBuilder where(String column, String operator, V value) {
-		if(whereClausel == null) whereClausel = new WhereClausel();
+		if(whereClausel == null) whereClausel = new WhereClause();
 		whereClausel.add(column, operator, value, null);
 		return this;
 	}
 	
 	public <V> SelectBuilder where(String column, String operator, V value, LogicalOperator logicalOperator) {
-		if(whereClausel == null) whereClausel = new WhereClausel();
+		if(whereClausel == null) whereClausel = new WhereClause();
 		whereClausel.add(column, operator, value, logicalOperator);
 		return this;
 	}
