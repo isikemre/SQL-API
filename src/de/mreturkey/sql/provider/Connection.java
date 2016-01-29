@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.sql.SQLTimeoutException;
 
 import de.mreturkey.sql.clausel.WhereClause;
+import de.mreturkey.sql.database.DataBase;
 import de.mreturkey.sql.query.DeleteQuery;
 import de.mreturkey.sql.query.InsertQuery;
 import de.mreturkey.sql.query.SelectQuery;
@@ -12,10 +13,9 @@ import de.mreturkey.sql.result.Result;
 import de.mreturkey.sql.table.Table;
 
 /**
- * Represents a QueryProvider
+ * Represents a Connection to a {@link DataBase}
  * @author mReTurkey
  * @see Provider
- *
  */
 public interface Connection {
 
@@ -223,5 +223,11 @@ public interface Connection {
 	 * @return the {@link java.sql.Connection} of this Connection
 	 */
 	java.sql.Connection getSQLConnection();
+	
+	/**
+	 * Closes the {@link Connection}
+	 * @throws SQLException 
+	 */
+	void close() throws SQLException;
 
 }

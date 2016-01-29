@@ -20,6 +20,10 @@ public class ProviderConnection implements Connection {
 
 	private final java.sql.Connection connection;
 	
+	/**
+	 * Creates a {@link ProviderConnection} with the {@link java.sql.jdbc.Connection} object
+	 * @param connection
+	 */
 	public ProviderConnection(java.sql.Connection connection) {
 		this.connection = connection;
 	}
@@ -134,7 +138,8 @@ public class ProviderConnection implements Connection {
 		
 		int i = 1;
 		for(Object o : pe.getArgs()) ps.setObject(i++, o);
-		return new ExecutedResult(ps.executeQuery(), updateQuery);
+		ps.executeUpdate();
+		return new ExecutedResult(null, updateQuery);
 	}
 
 	@Override
@@ -160,7 +165,8 @@ public class ProviderConnection implements Connection {
 		
 		int i = 1;
 		for(Object o : pe.getArgs()) ps.setObject(i++, o);
-		return new ExecutedResult(ps.executeQuery(), deleteQuery);
+		ps.executeUpdate();
+		return new ExecutedResult(null, deleteQuery);
 	}
 
 	@Override
@@ -186,6 +192,11 @@ public class ProviderConnection implements Connection {
 	@Override
 	public void queryTable(Table table, boolean createIfNotExists) throws SQLException {
 		this.updateQuery(table.toSQL(createIfNotExists));
+	}
+
+	@Override
+	public void close() throws SQLException {
+		this.connection.close();
 	}
 
 }

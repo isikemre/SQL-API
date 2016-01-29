@@ -7,6 +7,9 @@ public enum OrderBy implements Clause, SQLSerializable {
 	ASC,
 	DESC;
 
+	/**
+	 * Returns the SQL Syntax for this <code>OrderBy</code> type
+	 */
 	@Override
 	public String toSQL() {
 		return this.name();

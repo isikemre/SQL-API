@@ -24,6 +24,9 @@ import de.mreturkey.sql.table.Engine;
 import de.mreturkey.sql.table.SQLiteTable;
 import de.mreturkey.sql.table.Table;
 
+/**
+ * Represents the SQLite Provider
+ */
 public class SQLite implements Provider {
 
 	@Override
@@ -33,6 +36,12 @@ public class SQLite implements Provider {
 		return openConnection((SQLiteDataBase) database);
 	}
 	
+	/**
+	 * Opens a {@link Connection} to the {@link DataBase}
+	 * @param database the {@link SQLiteDataBase}
+	 * @return the opened {@link Connection}
+	 * @throws SQLException An exception that provides information on a database access error or other errors.
+	 */
 	public Connection openConnection(SQLiteDataBase database) throws SQLException {
 		if(database == null) throw new NullPointerException("database cannot be null");
 

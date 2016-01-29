@@ -24,6 +24,9 @@ import de.mreturkey.sql.table.Engine;
 import de.mreturkey.sql.table.MySQLTable;
 import de.mreturkey.sql.table.Table;
 
+/**
+ * Represents the MySQL Provider
+ */
 public final class MySQL implements Provider {
 
 	@Override
